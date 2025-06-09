@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <title>控制台</title>
+    <style>
+        :root {
+            --color-bg: #252526;
+            --color-navbar: #1e1e1e;
+            --color-tabbar: #1e1e1e;
+            --color-tab-active: #4fc3f7;
+            --color-tab-inactive: #888;
+            --color-border: #444;
+            --color-border-focus: #4fc3f7;
+            --color-label: #569CD6;
+            --color-input-bg: #1e1e1e;
+            --color-input-text: #d4d4d4;
+            --color-btn-bg: #1565c0;
+            --color-btn-text: #fff;
+            --color-success: #4caf50;
+            --color-error: #f44336;
+            --color-warning: #ff9800;
+            --radius: 5px;
+            --transition: 0.2s;
+            --font-main: Arial, sans-serif;
+        }
+        html {
+            touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-bg);
+            color: var(--color-input-text);
+            -webkit-tap-highlight-color: transparent;
+        }
+        main {
+            margin: 0 auto;
+            max-width: 500px;
+            width: 85%;
+            background: var(--color-bg);
+            padding: 20px;
+            min-height: 400px;
+            box-sizing: border-box;
+            margin-top: 70px;
+            margin-bottom: 70px;
+        }
+        .navbar {
+            width: 100%;
+            height: 56px;
+            background: var(--color-navbar);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        .tabbar {
+            width: 100%;
+            height: 60px;
+            background: var(--color-tabbar);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 10;
+            border-top: 1px solid #333;
+        }
+        .tabbar .tab {
+            flex: 1;
+            text-align: center;
+            color: var(--color-tab-inactive);
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: color var(--transition);
+            padding: 10px 0;
+        }
+        .tabbar .tab.active {
+            color: var(--color-tab-active);
+            font-weight: bold;
+        }
+        .tabbar .tab i {
+            display: block;
+            font-size: 1.5em;
+            margin-bottom: 2px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .btn {
+            width: 100%;
+            max-width: 350px;
+            display: block;
+            margin: 0 auto 16px auto;
+            padding: 10px 0;
+            background: var(--color-btn-bg);
+            color: var(--color-btn-text);
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background var(--transition), color var(--transition);
+            margin-top: 8px;
+        }
+        .btn:disabled {
+            background: #444 !important;
+            color: #888 !important;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        form {
+            max-width: 350px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 2px;
+            font-size: 1em;
+            font-weight: bold;
+            color: var(--color-label);
+        }
+        select,
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 4px;
+            margin-bottom: 12px;
+            border: 1.5px solid var(--color-border);
+            border-radius: var(--radius);
+            background: var(--color-input-bg);
+            color: var(--color-input-text);
+            font-size: 1em;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color var(--transition);
+            line-height: 1.5;
+            height: 42px;
+            padding-left: 10px;
+            padding-right: 10px;
+            appearance: none;
+            vertical-align: middle;
+        }
+        select {
+            padding-right: 36px;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 18px 18px;
+        }
+        select:focus,
+        input[type="password"]:focus,
+        input[type="text"]:focus {
+            border: 1.5px solid var(--color-border-focus);
+        }
+        input[readonly] {
+            border: none !important;
+            background: transparent;
+            color: var(--color-input-text);
+            box-shadow: none;
+            outline: none;
+        }
+        #wifi-status.connected {
+            color: var(--color-success);
+            font-weight: bold;
+        }
+        #wifi-status.disconnected {
+            color: var(--color-error);
+            font-weight: bold;
+        }
+        #wifi-status.connecting {
+            color: var(--color-warning);
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">控制台</nav>
+    <main>
+        <section id="tab-config" class="tab-content active">
+            <form id="config-form"></form>
+            <div class="form-actions">
+                <button id="btn-config-save" class="btn" type="button">保存</button>
+                <button id="btn-config-refresh" class="btn" type="button" style="background:#4caf50;">刷新</button>
+            </div>
+        </section>
+        <section id="tab-network" class="tab-content">
+            <form id="wifi-form">
+                <div class="form-group">
+                    <label for="wifi-status">状态：</label>
+                    <input type="text" id="wifi-status" name="status" placeholder="未刷新" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="ssid-select">网络：</label>
+                    <select id="ssid-select" name="ssid">
+                        <option value="">请选择WiFi名称</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="wifi-password">密码：</label>
+                    <input type="text" id="wifi-password" name="password" placeholder="请输入WiFi密码">
+                </div>
+                <div class="form-actions">
+                    <button id="btn-wifi-connect" class="btn" type="submit">连接</button>
+                    <button id="btn-wifi-refresh" class="btn" type="button" style="background:#4caf50;">刷新</button>
+                </div>
+            </form>
+        </section>
+        <section id="tab-control" class="tab-content">
+            <div class="form-actions">
+                <button id="btn-reboot" class="btn" style="background:#fbc02d;">重启设备</button>
+                <button id="btn-erase" class="btn" style="background:#f44336;">擦除配置</button>
+            </div>
+        </section>
+        <section id="tab-system" class="tab-content"></section>
+    </main>
+    <nav class="tabbar">
+        <div class="tab active" data-tab="config">配置</div>
+        <div class="tab" data-tab="network">网络</div>
+        <div class="tab" data-tab="control">控制</div>
+        <div class="tab" data-tab="system">系统</div>
+    </nav>
+    <script>
+        // Tab 切换
+        document.querySelector('.tabbar').addEventListener('click', e => {
+            if (!e.target.classList.contains('tab')) return;
+            document.querySelectorAll('.tabbar .tab').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + e.target.dataset.tab).classList.add('active');
+        });
+
+        // 工具函数
+        const $ = selector => document.querySelector(selector);
+        const $$ = selector => document.querySelectorAll(selector);
+
+        // 元素引用
+        const wifiForm     = $('#wifi-form');
+        const wifiStatus   = $('#wifi-status');
+        const ssidSelect   = $('#ssid-select');
+        const wifiPassword = $('#wifi-password');
+        const connectBtn   = $('#btn-wifi-connect');
+        const configForm   = $('#config-form');
+
+        // 去除字符串首尾空白和不可见字符
+        function trim(str) {
+            return str.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
+        }
+
+        // JSON-RPC 请求
+        async function jsonrpc(method, params = null) {
+            try {
+                const resp = await fetch(`${location.origin}/jsonrpc`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jsonrpc: '2.0', method, params, id: 0 })
+                });
+                return await resp.json();
+            } catch (error) {
+                console.error('jsonrpc:', error);
+            }
+        }
+
+        // WiFi 状态刷新
+        async function updateWifiStatus() {
+            setWifiStatus('connecting', "刷新中...");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            try {
+                const res = await jsonrpc("wifi_status");
+                if (res?.result?.status) {
+                    setWifiStatus('connected', res.result.status);
+                } else {
+                    setWifiStatus('disconnected', "未连接");
+                }
+            } catch {
+                setWifiStatus('connecting', "获取失败");
+            }
+        }
+
+        function setWifiStatus(cls, val) {
+            wifiStatus.className = cls;
+            wifiStatus.value = val;
+        }
+
+        // WiFi 扫描
+        let scanning = false;
+        ssidSelect.onfocus = async () => {
+            if (scanning) return;
+            scanning = true;
+            ssidSelect.innerHTML = '<option value="">扫描中...</option>';
+            try {
+                const res = await jsonrpc("wifi_scan");
+                if (Array.isArray(res?.result?.ssids)) {
+                    ssidSelect.innerHTML = res.result.ssids.length
+                        ? '<option value="">请选择WiFi名称</option>' + res.result.ssids.map(ssid => `<option value="${ssid}">${ssid}</option>`).join('')
+                        : '<option value="">未发现WiFi</option>';
+                } else {
+                    ssidSelect.innerHTML = '<option value="">扫描失败</option>';
+                }
+            } catch {
+                ssidSelect.innerHTML = '<option value="">扫描失败</option>';
+            }
+            scanning = false;
+        };
+
+        // WiFi 连接
+        wifiForm.onsubmit = async e => {
+            e.preventDefault();
+            setWifiStatus('', '');
+            await jsonrpc("wifi_connect", { ssid: ssidSelect.value, password: trim(wifiPassword.value) });
+        };
+
+        // 配置表单渲染
+        async function renderConfigForm() {
+            configForm.innerHTML = '';
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const configData = await jsonrpc("config");
+            configForm.innerHTML = '';
+            if (Array.isArray(configData?.result?.keys) && typeof configData.result.config === 'object') {
+                configData.result.keys.forEach(key => {
+                    const value = configData.result.config[key] ?? '';
+                    configForm.insertAdjacentHTML('beforeend', `
+                        <label for="config_${key}">${key}：</label>
+                        <input type="text" id="config_${key}" name="${key}" value="${value}" placeholder="" style="margin-bottom:12px;">
+                        <br>
+                    `);
+                });
+            }
+        }
+
+        // 按钮高亮
+        async function highlightBtnById(id, duration) {
+            const highlightBtnIds = [
+                'btn-config-save',
+                'btn-config-refresh',
+                'btn-wifi-connect',
+                'btn-wifi-refresh',
+                'btn-reboot',
+                'btn-erase'
+            ];
+            if (!highlightBtnIds.includes(id)) return false;
+            const btn = document.getElementById(id);
+            if (!btn) return false;
+            if (btn.disabled) return false;
+            const oldBg = btn.style.backgroundColor;
+            if (btn.style.backgroundColor == '#444') return false;
+            btn.style.backgroundColor = '#444';
+            await new Promise(resolve => setTimeout(resolve, duration));
+            btn.style.backgroundColor = oldBg;
+            return true;
+        }
+
+        // 事件委托
+        document.addEventListener('click', e => {
+            if (!highlightBtnById(e.target.id, 1000)) return;
+            switch (e.target.id) {
+                case 'btn-config-refresh': renderConfigForm(); break;
+                case 'btn-wifi-refresh': updateWifiStatus(); break;
+                case 'btn-reboot': jsonrpc('reboot'); break;
+                case 'btn-erase': jsonrpc('erase'); break;
+            }
+        });
+
+        // 配置表单保存（按钮）
+        $('#btn-config-save').onclick = async function() {
+            const inputs = $$('#config-form input[id^="config_"]');
+            const params = {};
+            inputs.forEach(input => params[input.id.replace(/^config_/, '')] = trim(input.value));
+            if (Object.keys(params).length === 0) return;
+            await jsonrpc("config", params);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            configForm.innerHTML = '';
+        };
+    </script>
+</body>
+</html>

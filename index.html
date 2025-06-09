@@ -101,9 +101,8 @@
         .tab-content.active {
             display: block;
         }
-        .btn {
+        button {
             width: 100%;
-            max-width: 350px;
             display: block;
             margin: 0 auto 16px auto;
             padding: 10px 0;
@@ -117,7 +116,7 @@
             transition: background var(--transition), color var(--transition);
             margin-top: 8px;
         }
-        .btn:disabled {
+        button:disabled {
             background: #444 !important;
             color: #888 !important;
             cursor: not-allowed;
@@ -187,56 +186,58 @@
             color: var(--color-warning);
             font-weight: bold;
         }
-        .form-group {
-            margin-bottom: 18px;
-        }
     </style>
 </head>
 <body>
     <nav class="navbar">控制台</nav>
     <main>
-        <section id="tab-config" class="tab-content active">
+        <section id="tab-device" class="tab-content active">
+            <div>
+            <label for="device-select">设备：</label>
+                <select id="device-select" name="device">
+                    <option value="">请选择设备</option>
+                </select>
+            </div>
+        </section>
+        <section id="tab-config" class="tab-content">
             <form id="config-form"></form>
-            <div class="form-actions">
-                <button id="btn-config-save" class="btn" type="button">保存</button>
-                <button id="btn-config-refresh" class="btn" type="button" style="background:#4caf50;">刷新</button>
+            <div>
+                <button id="btn-config-save" type="button">保存</button>
+                <button id="btn-config-refresh" type="button" style="background:#4caf50;">刷新</button>
             </div>
         </section>
         <section id="tab-network" class="tab-content">
-            <form id="wifi-form">
-                <div class="form-group">
-                    <label for="wifi-status">状态：</label>
-                    <input type="text" id="wifi-status" name="status" placeholder="未刷新" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="ssid-select">网络：</label>
-                    <select id="ssid-select" name="ssid">
-                        <option value="">请选择WiFi名称</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="wifi-password">密码：</label>
-                    <input type="text" id="wifi-password" name="password" placeholder="请输入WiFi密码">
-                </div>
-                <div class="form-actions">
-                    <button id="btn-wifi-connect" class="btn" type="submit">连接</button>
-                    <button id="btn-wifi-refresh" class="btn" type="button" style="background:#4caf50;">刷新</button>
-                </div>
-            </form>
-        </section>
-        <section id="tab-control" class="tab-content">
-            <div class="form-actions">
-                <button id="btn-reboot" class="btn" style="background:#fbc02d;">重启设备</button>
-                <button id="btn-erase" class="btn" style="background:#f44336;">擦除配置</button>
+            <div>
+                <label for="wifi-status">状态：</label>
+                <input type="text" id="wifi-status" name="status" placeholder="未刷新" readonly>
+            </div>
+            <div>
+                <label for="ssid-select">网络：</label>
+                <select id="ssid-select" name="ssid">
+                    <option value="">请选择WiFi名称</option>
+                </select>
+            </div>
+            <div>
+                <label for="wifi-password">密码：</label>
+                <input type="text" id="wifi-password" name="password" placeholder="请输入WiFi密码">
+            </div>
+            <div>
+                <button id="btn-wifi-connect" type="button">连接</button>
+                <button id="btn-wifi-refresh" type="button" style="background:#4caf50;">刷新</button>
             </div>
         </section>
-        <section id="tab-system" class="tab-content"></section>
+        <section id="tab-control" class="tab-content">
+            <div>
+                <button id="btn-reboot" style="background:#fbc02d;">重启设备</button>
+                <button id="btn-erase" style="background:#f44336;">擦除配置</button>
+            </div>
+        </section>
     </main>
     <nav class="tabbar">
-        <div class="tab active" data-tab="config">配置</div>
+        <div class="tab active" data-tab="device">设备</div>
+        <div class="tab" data-tab="config">配置</div>
         <div class="tab" data-tab="network">网络</div>
         <div class="tab" data-tab="control">控制</div>
-        <div class="tab" data-tab="system">系统</div>
     </nav>
     <script>
         // Tab 切换
@@ -253,7 +254,6 @@
         const $$ = selector => document.querySelectorAll(selector);
 
         // 元素引用
-        const wifiForm     = $('#wifi-form');
         const wifiStatus   = $('#wifi-status');
         const ssidSelect   = $('#ssid-select');
         const wifiPassword = $('#wifi-password');
@@ -322,8 +322,7 @@
         };
 
         // WiFi 连接
-        wifiForm.onsubmit = async e => {
-            e.preventDefault();
+        connectBtn.onclick = async () => {
             setWifiStatus('', '');
             await jsonrpc("wifi_connect", { ssid: ssidSelect.value, password: trim(wifiPassword.value) });
         };
@@ -388,6 +387,27 @@
             await jsonrpc("config", params);
             await new Promise(resolve => setTimeout(resolve, 1000));
             configForm.innerHTML = '';
+        };
+
+        // 设备扫描（Web Bluetooth API）
+        const deviceSelect = $('#device-select');
+        deviceSelect.onfocus = async () => {
+            // 防止重复扫描
+            if (deviceSelect.dataset.scanning === '1') return;
+            deviceSelect.dataset.scanning = '1';
+            deviceSelect.innerHTML = '<option value="">扫描中...</option>';
+            try {
+                // 只扫描带有名称的蓝牙设备
+                const device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: []
+                });
+                // 填充下拉框
+                deviceSelect.innerHTML = `<option value="${device.id}">${device.name || '未知设备'}</option>`;
+            } catch (e) {
+                deviceSelect.innerHTML = '<option value="">未发现蓝牙设备或用户取消</option>';
+            }
+            deviceSelect.dataset.scanning = '0';
         };
     </script>
 </body>

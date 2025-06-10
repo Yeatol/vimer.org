@@ -268,19 +268,15 @@
 
         // JSON-RPC 请求
         async function jsonrpc(method, params = null) {
-            try {
-                // 获取 device-ip 输入框的值
-                const deviceIp = $('#device-ip').value.trim();
-                const url = `http://${deviceIp}/jsonrpc`;
-                const resp = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ jsonrpc: '2.0', method, params, id: 0 })
-                });
-                return await resp.json();
-            } catch (error) {
-                console.error('jsonrpc:', error);
-            }
+            // 获取 device-ip 输入框的值
+            const deviceIp = $('#device-ip').value.trim();
+            const url = `http://${deviceIp}/jsonrpc`;
+            const resp = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ jsonrpc: '2.0', method, params, id: 0 })
+            });
+            return await resp.json();
         }
 
         // WiFi 状态刷新
@@ -295,7 +291,7 @@
                     setWifiStatus('disconnected', "未连接");
                 }
             } catch {
-                setWifiStatus('connecting', "获取失败");
+                setWifiStatus('disconnected', "设备连接失败");
             }
         }
 
@@ -320,7 +316,7 @@
                     ssidSelect.innerHTML = '<option value="">扫描失败</option>';
                 }
             } catch {
-                ssidSelect.innerHTML = '<option value="">扫描失败</option>';
+                ssidSelect.innerHTML = '<option value="">设备连接失败</option>';
             }
             scanning = false;
         };
@@ -385,13 +381,13 @@
 
         // 配置表单保存（按钮）
         $('#btn-config-save').onclick = async function() {
-            const inputs = $$('#config-form input[id^="config_"]');
+            const inputs = $$('#config input[id^="config_"]');
             const params = {};
             inputs.forEach(input => params[input.id.replace(/^config_/, '')] = trim(input.value));
             if (Object.keys(params).length === 0) return;
             await jsonrpc("config", params);
             await new Promise(resolve => setTimeout(resolve, 1000));
-            configForm.innerHTML = '';
+            configList.innerHTML = '';
         };
     </script>
 </body>

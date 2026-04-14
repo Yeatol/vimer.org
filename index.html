@@ -103,6 +103,18 @@
             display: block;
         }
 
+        .flex_row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .flex_row button {
+            flex: 1;
+            margin: 0;
+            margin-bottom: 0;
+        }
+
         /* 按钮样式 */
         button {
             width: 100%;
@@ -124,6 +136,11 @@
             color: #888 !important;
             cursor: not-allowed;
             opacity: 0.7;
+        }
+        button:active {
+            transform: scale(0.98);
+            transition: all 0.1s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
         }
 
         /* 表单控件统一样式 */
@@ -189,15 +206,249 @@
             color: var(--color-warning);
             font-weight: bold;
         }
+
+        /* 文件输入控件样式 */
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 4px;
+            margin-bottom: 12px;
+            border: 1.5px solid var(--color-border);
+            border-radius: var(--radius);
+            background: var(--color-input-bg);
+            color: var(--color-input-text);
+            font-size: 1em;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color var(--transition);
+            cursor: pointer;
+        }
+        input[type="file"]:focus {
+            border: 1.5px solid var(--color-border-focus);
+        }
+        input[type="file"]::file-selector-button {
+            background: var(--color-btn-bg);
+            color: var(--color-btn-text);
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            margin-right: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        /* 滑动条样式 */
+        input[type="range"] {
+            width: 100%;
+            height: 32px;
+            border-radius: 5px;
+            background: #444;
+            outline: none;
+            -webkit-appearance: none;
+            margin: 10px 0;
+        }
+
+        /* 滑动条轨道 */
+        input[type="range"]::-webkit-slider-track {
+            width: 100%;
+            height: 32px;
+            cursor: pointer;
+            background: #444;
+            border-radius: 5px;
+        }
+
+        /* 滑动条滑块 */
+        input[type="range"]::-webkit-slider-thumb {
+            height: 32px;
+            width: 32px;
+            border-radius: 50%;
+            background: #4caf50;
+            cursor: pointer;
+            -webkit-appearance: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* 档位按钮样式 */
+        .radio-button {
+            flex: 1;
+            margin: 0;
+            margin-bottom: 0;
+            padding: 10px 0;
+            background: #444;
+            color: var(--color-btn-text);
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background var(--transition);
+            margin-top: 8px;
+            text-align: center;
+            display: flex;              /* 添加 */
+            align-items: center;        /* 垂直居中 */
+            justify-content: center;    /* 水平居中 */
+        }
+
+        /* 按下效果 */
+        .radio-button:active {
+            transform: scale(0.98);
+            transition: all 0.1s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* 单选状态样式 */
+        input[type="radio"]:checked + .radio-button {
+            background: #4caf50 !important;
+        }
+
+        /* 多选状态样式 */
+        input[type="checkbox"]:checked + .radio-button {
+            background: #4caf50 !important;
+        }
+
+        /* 图片预览样式 */
+        #image-preview-container {
+            margin-bottom: 16px;
+        }
+        #image-preview {
+            margin-top: 8px;
+            text-align: center;
+            padding: 10px;
+            background: var(--color-input-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">控制台</nav>
     <main>
-        <section id="tab-device" class="tab-content active">
+        <section id="tab-control" class="tab-content active">
             <div>
-                <label for="device-ip">设备地址：</label>
-                <input type="text" id="device-ip" name="device-ip" value="192.168.200.1">
+                <label>设备</label>
+                <div class="flex_row">
+                    <button id="btn-reboot" style="background:#fbc02d;">重启设备</button>
+                    <button id="btn-erase" style="background:#f44336;">擦除配置</button>
+                </div>
+            </div>
+            <div>
+                <label>状态</label>
+                <div class="flex_row">
+                    <input type="radio" id="state_0" name="state" value="0" style="display: none;"><label for="state_0" class="radio-button">0</label>
+                    <input type="radio" id="state_1" name="state" value="1" style="display: none;"><label for="state_1" class="radio-button">1</label>
+                    <input type="radio" id="state_2" name="state" value="2" style="display: none;"><label for="state_2" class="radio-button">2</label>
+                    <input type="radio" id="state_3" name="state" value="3" style="display: none;"><label for="state_3" class="radio-button">3</label>
+                    <input type="radio" id="state_4" name="state" value="4" style="display: none;"><label for="state_4" class="radio-button">4</label>
+                    <input type="radio" id="state_5" name="state" value="5" style="display: none;"><label for="state_5" class="radio-button">5</label>
+                    <input type="radio" id="state_6" name="state" value="6" style="display: none;"><label for="state_6" class="radio-button">6</label>
+                    <input type="radio" id="state_7" name="state" value="7" style="display: none;"><label for="state_7" class="radio-button">7</label>
+                    <input type="radio" id="state_8" name="state" value="8" style="display: none;"><label for="state_8" class="radio-button">8</label>
+                    <input type="radio" id="state_9" name="state" value="9" style="display: none;"><label for="state_9" class="radio-button">9</label>
+                </div>
+                <label>充电状态</label>
+                <div class="flex_row">
+                    <input type="radio" id="charging_state_0" name="charging_state" value="0" style="display: none;"><label for="charging_state_0" class="radio-button">0</label>
+                    <input type="radio" id="charging_state_1" name="charging_state" value="1" style="display: none;"><label for="charging_state_1" class="radio-button">1</label>
+                    <input type="radio" id="charging_state_2" name="charging_state" value="2" style="display: none;"><label for="charging_state_2" class="radio-button">2</label>
+                    <input type="radio" id="charging_state_3" name="charging_state" value="3" style="display: none;"><label for="charging_state_3" class="radio-button">3</label>
+                    <input type="radio" id="charging_state_4" name="charging_state" value="4" style="display: none;"><label for="charging_state_4" class="radio-button">4</label>
+                    <input type="radio" id="charging_state_5" name="charging_state" value="5" style="display: none;"><label for="charging_state_5" class="radio-button">5</label>
+                    <input type="radio" id="charging_state_6" name="charging_state" value="6" style="display: none;"><label for="charging_state_6" class="radio-button">6</label>
+                    <input type="radio" id="charging_state_7" name="charging_state" value="7" style="display: none;"><label for="charging_state_7" class="radio-button">7</label>
+                    <input type="radio" id="charging_state_8" name="charging_state" value="8" style="display: none;"><label for="charging_state_8" class="radio-button">8</label>
+                </div>
+                <label>充电口颜色</label>
+                <div class="flex_row">
+                    <input type="radio" id="charge_port_color_0" name="charge_port_color" value="0" style="display: none;"><label for="charge_port_color_0" class="radio-button">0</label>
+                    <input type="radio" id="charge_port_color_1" name="charge_port_color" value="1" style="display: none;"><label for="charge_port_color_1" class="radio-button">1</label>
+                    <input type="radio" id="charge_port_color_2" name="charge_port_color" value="2" style="display: none;"><label for="charge_port_color_2" class="radio-button">2</label>
+                    <input type="radio" id="charge_port_color_3" name="charge_port_color" value="3" style="display: none;"><label for="charge_port_color_3" class="radio-button">3</label>
+                    <input type="radio" id="charge_port_color_4" name="charge_port_color" value="4" style="display: none;"><label for="charge_port_color_4" class="radio-button">4</label>
+                    <input type="radio" id="charge_port_color_5" name="charge_port_color" value="5" style="display: none;"><label for="charge_port_color_5" class="radio-button">5</label>
+                    <input type="radio" id="charge_port_color_6" name="charge_port_color" value="6" style="display: none;"><label for="charge_port_color_6" class="radio-button">6</label>
+                    <input type="radio" id="charge_port_color_7" name="charge_port_color" value="7" style="display: none;"><label for="charge_port_color_7" class="radio-button">7</label>
+                    <input type="radio" id="charge_port_color_8" name="charge_port_color" value="8" style="display: none;"><label for="charge_port_color_8" class="radio-button">8</label>
+                    <input type="radio" id="charge_port_color_9" name="charge_port_color" value="9" style="display: none;"><label for="charge_port_color_9" class="radio-button">9</label>
+                    <input type="radio" id="charge_port_color_10" name="charge_port_color" value="10" style="display: none;"><label for="charge_port_color_10" class="radio-button">10</label>
+                </div>
+                <label>充电类型</label>
+                <div class="flex_row">
+                    <input type="radio" id="fast_charger_present_0" name="fast_charger_present" value="0" style="display: none;"><label for="fast_charger_present_0" class="radio-button">慢充</label>
+                    <input type="radio" id="fast_charger_present_1" name="fast_charger_present" value="1" style="display: none;"><label for="fast_charger_present_1" class="radio-button">快充</label>
+                </div>
+                <label>中控屏幕</label>
+                <div class="flex_row">
+                    <input type="radio" id="center_display_state_4" name="center_display_state" value="4" style="display: none;"><label for="center_display_state_4" class="radio-button">开启</label>
+                    <input type="radio" id="center_display_state_1" name="center_display_state" value="1" style="display: none;"><label for="center_display_state_1" class="radio-button">关闭</label>
+                </div>
+                <label>车门</label>
+                <div class="flex_row">
+                    <input type="checkbox" id="door_df" name="door" value="df" style="display: none;"><label for="door_df" class="radio-button">主驾</label>
+                    <input type="checkbox" id="door_pf" name="door" value="pf" style="display: none;"><label for="door_pf" class="radio-button">副驾</label>
+                    <input type="checkbox" id="door_dr" name="door" value="dr" style="display: none;"><label for="door_dr" class="radio-button">左后</label>
+                    <input type="checkbox" id="door_pr" name="door" value="pr" style="display: none;"><label for="door_pr" class="radio-button">右后</label>
+                    <input type="checkbox" id="trunk_f" name="door" value="tf" style="display: none;"><label for="trunk_f" class="radio-button">前备箱</label>
+                    <input type="checkbox" id="trunk_r" name="door" value="tr" style="display: none;"><label for="trunk_r" class="radio-button">后备箱</label>
+                    <input type="checkbox" id="charge_port" name="door" value="cp" style="display: none;"><label for="charge_port" class="radio-button">充电口</label>
+                </div>
+                <label>档位</label>
+                <div class="flex_row">
+                    <input type="radio" id="shift_0" name="shift" value="0" style="display: none;"><label for="shift_0" class="radio-button">清空</label>
+                    <input type="radio" id="shift_p" name="shift" value="2" style="display: none;"><label for="shift_p" class="radio-button">P</label>
+                    <input type="radio" id="shift_d" name="shift" value="5" style="display: none;"><label for="shift_d" class="radio-button">D</label>
+                    <input type="radio" id="shift_n" name="shift" value="4" style="display: none;"><label for="shift_n" class="radio-button">N</label>
+                    <input type="radio" id="shift_r" name="shift" value="3" style="display: none;"><label for="shift_r" class="radio-button">R</label>
+                </div>
+                <label>设置-电量显示</label>
+                <div class="flex_row">
+                    <input type="radio" id="battery_0" name="battery" value="0" style="display: none;"><label for="battery_0" class="radio-button">百分比</label>
+                    <input type="radio" id="battery_1" name="battery" value="1" style="display: none;"><label for="battery_1" class="radio-button">距离</label>
+                </div>
+                <label>设置-速度单位</label>
+                <div class="flex_row">
+                    <input type="radio" id="speed_unit_0" name="speed_unit" value="0" style="display: none;"><label for="speed_unit_0" class="radio-button">公里/小时</label>
+                    <input type="radio" id="speed_unit_1" name="speed_unit" value="1" style="display: none;"><label for="speed_unit_1" class="radio-button">英里/小时</label>
+                </div>
+                <label>模拟行驶</label>
+                <div class="flex_row">
+                    <input type="radio" id="drive_start" name="drive" value="4" style="display: none;"><label for="drive_start" class="radio-button">开始</label>
+                    <input type="radio" id="drive_stop"  name="drive" value="3" style="display: none;"><label for="drive_stop"  class="radio-button">停止</label>
+                </div>
+                <label>行驶表盘切换</label>
+                <div class="flex_row">
+                    <button id="dial_drive_x_add" style="background:#f44336;">上</button>
+                    <button id="dial_drive_x_sub" style="background:#f44336;">下</button>
+                    <button id="dial_drive_y_add" style="background:#fbc02d;">左</button>
+                    <button id="dial_drive_y_sub" style="background:#fbc02d;">右</button>
+                </div>
+                <form oninput="speed_show.value = speed_slider.value">
+                    <label>速度 <output name="speed_show" for="speed_slider">0</output></label>
+                    <div><input type="range" id="speed_slider" min="0" max="241" value="0" step="1"></div>
+                </form>
+                <form oninput="power_show.value = power_slider.value">
+                    <label>加速度 <output name="power_show" for="power_slider">0</output></label>
+                    <div><input type="range" id="power_slider" min="-80" max="171" value="0" step="1"></div>
+                </form>
+                <form oninput="battery_level_show.value = battery_level_slider.value">
+                    <label>电量百分比 <output name="battery_level_show" for="battery_level_slider">0</output>%</label>
+                    <div><input type="range" id="battery_level_slider" min="0" max="100" value="0" step="1"></div>
+                </form>
+                <form oninput="battery_range_show.value = battery_range_slider.value">
+                    <label>电量里程 <output name="battery_range_show" for="battery_range_slider">0</output></label>
+                    <div><input type="range" id="battery_range_slider" min="0" max="435" value="0" step="1"></div>
+                </form>
+                <form oninput="temp_inside_show.value = temp_inside_slider.value">
+                    <label>室内温度 <output name="temp_inside_show" for="temp_inside_slider">0</output>℃</label>
+                    <div><input type="range" id="temp_inside_slider" min="-100" max="100" value="0" step="1"></div>
+                </form>
+                <form oninput="temp_outside_show.value = temp_outside_slider.value">
+                    <label>室外温度 <output name="temp_outside_show" for="temp_outside_slider">0</output>℃</label>
+                    <div><input type="range" id="temp_outside_slider" min="-100" max="100" value="0" step="1"></div>
+                </form>
+                <form oninput="heading_show.value = heading_slider.value">
+                    <label>车头朝向 <output name="heading_show" for="heading_slider">0</output>°</label>
+                    <div><input type="range" id="heading_slider" min="0" max="360" value="0" step="1"></div>
+                </form>
             </div>
         </section>
         <section id="tab-config" class="tab-content">
@@ -227,18 +478,40 @@
                 <button id="btn-wifi-refresh" type="button" style="background:#4caf50;">刷新</button>
             </div>
         </section>
-        <section id="tab-control" class="tab-content">
+        <section id="tab-image" class="tab-content">
+            <div id="image-preview-container" style="display: none;">
+                <div id="image-preview">
+                    <img id="preview-img" src="" alt="图片预览" style="max-width: 100%; height: auto; border-radius: 5px; border: 1px solid var(--color-border);">
+                </div>
+            </div>
             <div>
-                <button id="btn-reboot" style="background:#fbc02d;">重启设备</button>
-                <button id="btn-erase" style="background:#f44336;">擦除配置</button>
+                <input type="file" id="file-input" accept="image/png">
+            </div>
+            <div>
+                <button id="btn-upload" style="background:#4caf50;">上传</button>
+            </div>
+            <div id="image-preview-container" style="display: none;">
+                <div id="image-preview">
+                    <img id="preview-bmp" src="" alt="图片预览" style="max-width: 100%; height: auto; border-radius: 5px; border: 1px solid var(--color-border);">
+                </div>
+            </div>
+            <div>
+                <button id="btn-snapshot" style="background:#fbc02d;">截幕</button>
+            </div>
+        </section>
+        <section id="tab-device" class="tab-content">
+            <div>
+                <label for="device-ip">设备地址：</label>
+                <input type="text" id="device-ip" name="device-ip" value="192.168.0.5">
             </div>
         </section>
     </main>
     <nav class="tabbar">
-        <div class="tab active" data-tab="device">设备</div>
+        <div class="tab active" data-tab="control">控制</div>
         <div class="tab" data-tab="network">网络</div>
         <div class="tab" data-tab="config">配置</div>
-        <div class="tab" data-tab="control">控制</div>
+        <div class="tab" data-tab="image">图片</div>
+        <div class="tab" data-tab="device">设备</div>
     </nav>
     <script>
         // Tab 切换
@@ -279,14 +552,80 @@
             return await resp.json();
         }
 
+        // 文件选择预览功能
+        $('#file-input').onchange = function(e) {
+            const file = e.target.files[0];
+            const previewContainer = $('#image-preview-container');
+            const previewImg = $('#preview-img');
+
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        };
+
+        // 文件上传函数
+        async function uploadFile() {
+            const fileInput = $('#file-input');
+            if (fileInput && fileInput.files.length > 0) {
+                const file = fileInput.files[0]
+                const deviceIp = $('#device-ip').value.trim();
+                try {
+                    const response = await fetch(`http://${deviceIp}/upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/octet-stream',
+                            'Content-Length': file.size.toString()
+                        },
+                        body: file
+                    });
+
+                    if (response.ok) {
+                        alert('文件上传成功');
+                    } else {
+                        alert('文件上传失败');
+                    }
+                } catch (error) {
+                    alert('上传过程中发生错误: ' + error.message);
+                }
+            } else {
+                alert('请先选择文件');
+            }
+        }
+
+        // 截屏
+        async function snapshot(){
+            try {
+                const res = await jsonrpc("snapshot");
+                if (res?.result?.bmp) {
+                    // 显示 bmp 预览
+                    const bmpData = res.result.bmp;
+                    const previewContainer = document.querySelectorAll('#image-preview-container')[1];
+                    const previewBmp = document.getElementById('preview-bmp');
+                    previewBmp.src = 'data:image/bmp;base64,' + bmpData;
+                    previewContainer.style.display = 'block';
+                } else {
+                    alert('未获取到图片数据');
+                }
+            } catch {
+                alert('截屏失败: ' + (e.message || e));
+            }
+        }
+
         // WiFi 状态刷新
         async function updateWifiStatus() {
             setWifiStatus('connecting', "刷新中...");
             await new Promise(resolve => setTimeout(resolve, 1000));
             try {
                 const res = await jsonrpc("wifi_status");
-                if (res?.result?.status) {
-                    setWifiStatus('connected', res.result.status);
+                if (res?.result?.ip) {
+                    setWifiStatus('connected', res.result.ssid + " " + res.result.ip);
                 } else {
                     setWifiStatus('disconnected', "未连接");
                 }
@@ -333,8 +672,9 @@
             await new Promise(resolve => setTimeout(resolve, 1000));
             const configData = await jsonrpc("config");
             configList.innerHTML = '';
-            if (Array.isArray(configData?.result?.keys) && typeof configData.result.config === 'object') {
-                configData.result.keys.forEach(key => {
+            const keys = ['vin', 'vin_0', 'vin_1', 'vin_2'];
+            if (typeof configData?.result?.config === 'object') {
+                keys.forEach(key => {
                     const value = configData.result.config[key] ?? '';
                     configList.insertAdjacentHTML('beforeend', `
                         <div">
@@ -346,38 +686,118 @@
             }
         }
 
-        // 按钮高亮
-        async function highlightBtnById(id, duration) {
-            const highlightBtnIds = [
-                'btn-config-save',
-                'btn-config-refresh',
-                'btn-wifi-connect',
-                'btn-wifi-refresh',
-                'btn-reboot',
-                'btn-erase'
-            ];
-            if (!highlightBtnIds.includes(id)) return false;
-            const btn = document.getElementById(id);
-            if (!btn) return false;
-            if (btn.disabled) return false;
-            const oldBg = btn.style.backgroundColor;
-            if (btn.style.backgroundColor == '#444') return false;
-            btn.style.backgroundColor = '#444';
-            await new Promise(resolve => setTimeout(resolve, duration));
-            btn.style.backgroundColor = oldBg;
-            return true;
+        // 模拟驾驶
+        let driveInterval = null;
+
+        function drive_start()
+        {
+            clearInterval(driveInterval);
+            let speed = 0;
+            let power = 0;
+            let speed_direction = 1;
+            let power_direction = 1;
+
+            driveInterval = setInterval(() => {
+                // 切换加速/减速
+                if (speed >= 250) speed_direction *= -1;
+                if (speed <= 1)   speed_direction *= -1;
+                if (power >= 170) power_direction *= -1;
+                if (power <= -80) power_direction *= -1;
+
+                // 速度变化
+                speed += speed_direction * 7;
+                speed = Math.max(1, Math.min(250, speed));
+                $('#speed_slider').value = speed;
+                $('#speed_slider').dispatchEvent(new Event('input', { bubbles: true }));
+
+                // 加速度变化
+                power += power_direction * 3;
+                power = Math.max(-80, Math.min(170, power));
+                $('#power_slider').value = power;
+                $('#power_slider').dispatchEvent(new Event('input', { bubbles: true }));
+            }, 50);
+        }
+
+        function drive_stop()
+        {
+            clearInterval(driveInterval);
         }
 
         // 事件委托
         document.addEventListener('click', e => {
-            if (!highlightBtnById(e.target.id, 1000)) return;
             switch (e.target.id) {
                 case 'btn-config-refresh': renderConfigForm(); break;
                 case 'btn-wifi-refresh': updateWifiStatus(); break;
                 case 'btn-reboot': jsonrpc('reboot'); break;
                 case 'btn-erase': jsonrpc('erase'); break;
+                case 'btn-snapshot': snapshot(); break;
+                case 'btn-upload': uploadFile(); break;
+                case 'state_0': jsonrpc('tesla', { state: 0 }); break;
+                case 'state_1': jsonrpc('tesla', { state: 1 }); break;
+                case 'state_2': jsonrpc('tesla', { state: 2 }); break;
+                case 'state_3': jsonrpc('tesla', { state: 3 }); break;
+                case 'state_4': jsonrpc('tesla', { state: 4 }); break;
+                case 'state_5': jsonrpc('tesla', { state: 5 }); break;
+                case 'state_6': jsonrpc('tesla', { state: 6 }); break;
+                case 'state_7': jsonrpc('tesla', { state: 7 }); break;
+                case 'state_8': jsonrpc('tesla', { state: 8 }); break;
+                case 'state_9': jsonrpc('tesla', { state: 9 }); break;
+                case 'charging_state_0': jsonrpc('tesla', { charging_state: 0 }); break;
+                case 'charging_state_1': jsonrpc('tesla', { charging_state: 1 }); break;
+                case 'charging_state_2': jsonrpc('tesla', { charging_state: 2 }); break;
+                case 'charging_state_3': jsonrpc('tesla', { charging_state: 3 }); break;
+                case 'charging_state_4': jsonrpc('tesla', { charging_state: 4 }); break;
+                case 'charging_state_5': jsonrpc('tesla', { charging_state: 5 }); break;
+                case 'charging_state_6': jsonrpc('tesla', { charging_state: 6 }); break;
+                case 'charging_state_7': jsonrpc('tesla', { charging_state: 7 }); break;
+                case 'charging_state_8': jsonrpc('tesla', { charging_state: 8 }); break;
+                case 'charge_port_color_0': jsonrpc('tesla', { charge_port_color: 0 }); break;
+                case 'charge_port_color_1': jsonrpc('tesla', { charge_port_color: 1 }); break;
+                case 'charge_port_color_2': jsonrpc('tesla', { charge_port_color: 2 }); break;
+                case 'charge_port_color_3': jsonrpc('tesla', { charge_port_color: 3 }); break;
+                case 'charge_port_color_4': jsonrpc('tesla', { charge_port_color: 4 }); break;
+                case 'charge_port_color_5': jsonrpc('tesla', { charge_port_color: 5 }); break;
+                case 'charge_port_color_6': jsonrpc('tesla', { charge_port_color: 6 }); break;
+                case 'charge_port_color_7': jsonrpc('tesla', { charge_port_color: 7 }); break;
+                case 'charge_port_color_8': jsonrpc('tesla', { charge_port_color: 8 }); break;
+                case 'charge_port_color_9': jsonrpc('tesla', { charge_port_color: 9 }); break;
+                case 'charge_port_color_10': jsonrpc('tesla', { charge_port_color: 10 }); break;
+                case 'fast_charger_present_0': jsonrpc('tesla', { fast_charger_present: false }); break;
+                case 'fast_charger_present_1': jsonrpc('tesla', { fast_charger_present: true }); break;
+                case 'center_display_state_4': jsonrpc('tesla', { center_display_state: 4 }); break;
+                case 'center_display_state_1': jsonrpc('tesla', { center_display_state: 1 }); break;
+                case 'door_df': jsonrpc('tesla', { door_df: e.target.checked }); break;
+                case 'door_pf': jsonrpc('tesla', { door_pf: e.target.checked }); break;
+                case 'door_dr': jsonrpc('tesla', { door_dr: e.target.checked }); break;
+                case 'door_pr': jsonrpc('tesla', { door_pr: e.target.checked }); break;
+                case 'trunk_f': jsonrpc('tesla', { trunk_f: e.target.checked }); break;
+                case 'trunk_r': jsonrpc('tesla', { trunk_r: e.target.checked }); break;
+                case 'charge_port': jsonrpc('tesla', { charge_port: e.target.checked }); break;
+                case 'shift_0': jsonrpc('tesla', { shift: 0 }); break;
+                case 'shift_p': jsonrpc('tesla', { shift: 2 }); break;
+                case 'shift_d': jsonrpc('tesla', { shift: 5 }); break;
+                case 'shift_n': jsonrpc('tesla', { shift: 4 }); break;
+                case 'shift_r': jsonrpc('tesla', { shift: 3 }); break;
+                case 'battery_0': jsonrpc('tesla', { battery: 0 }); break;
+                case 'battery_1': jsonrpc('tesla', { battery: 1 }); break;
+                case 'speed_unit_0': jsonrpc('tesla', { speed_unit: 0 }); break;
+                case 'speed_unit_1': jsonrpc('tesla', { speed_unit: 1 }); break;
+                case 'dial_drive_x_add' : jsonrpc('tesla', { dial_drive_x: -1 }); break;
+                case 'dial_drive_x_sub' : jsonrpc('tesla', { dial_drive_x: 1 }); break;
+                case 'dial_drive_y_add' : jsonrpc('tesla', { dial_drive_y: -1 }); break;
+                case 'dial_drive_y_sub' : jsonrpc('tesla', { dial_drive_y: 1 }); break;
+                case 'drive_start': drive_start(); break;
+                case 'drive_stop': drive_stop(); break;
             }
         });
+
+        $('#speed_slider').addEventListener('input', function(e) { jsonrpc('tesla', { speed: parseInt(e.target.value) }); });
+        $('#power_slider').addEventListener('input', function(e) { jsonrpc('tesla', { power: parseInt(e.target.value) }); });
+        $('#battery_level_slider').addEventListener('input', function(e) { jsonrpc('tesla', { battery_level: parseInt(e.target.value) }); });
+        $('#battery_range_slider').addEventListener('input', function(e) { jsonrpc('tesla', { battery_range: parseInt(e.target.value) }); });
+        $('#temp_inside_slider').addEventListener('input', function(e) { jsonrpc('tesla', { temp_inside: parseInt(e.target.value) }); });
+        $('#temp_outside_slider').addEventListener('input', function(e) { jsonrpc('tesla', { temp_outside: parseInt(e.target.value) }); });
+        $('#heading_slider').addEventListener('input', function(e) { jsonrpc('tesla', { heading: parseInt(e.target.value) }); });
 
         // 配置表单保存（按钮）
         $('#btn-config-save').onclick = async function() {
@@ -389,6 +809,37 @@
             await new Promise(resolve => setTimeout(resolve, 1000));
             configList.innerHTML = '';
         };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (location.hostname) {
+                $('#device-ip').value = location.hostname;
+            }
+        });
+
+        // 让所有滑动条点击时获得焦点，聚焦时可用滚轮调整数值并阻止页面滚动
+        $$('input[type="range"]').forEach(slider => {
+            slider.addEventListener('mousedown', function() {
+                this.focus();
+            });
+            slider.addEventListener('touchstart', function() {
+                this.focus();
+            });
+            slider.addEventListener('wheel', function(e) {
+                if (document.activeElement !== slider) return;
+                e.preventDefault();
+                e.stopPropagation();
+                const step = Number(slider.step) || 1;
+                let value = Number(slider.value);
+                if (e.deltaY < 0) {
+                    value += step;
+                } else {
+                    value -= step;
+                }
+                value = Math.max(Number(slider.min), Math.min(Number(slider.max), value));
+                slider.value = value;
+                slider.dispatchEvent(new Event('input', { bubbles: true }));
+            });
+        });
     </script>
 </body>
 </html>

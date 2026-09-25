@@ -1,3 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LittleJS Demo</title>
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #020817;
+      font-family: Inter, "Segoe UI", sans-serif;
+    }
+    body {
+      display: grid;
+      place-items: center;
+    }
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      image-rendering: auto;
+    }
+  </style>
+</head>
+<body>
+  <script src="./littlejs.js"></script>
+  <script>
+    let wave = 0;
+
+    function gameInit() {}
+
+    function gameUpdate() {
+      wave += 0.03;
+    }
+
+    function gameRender() {
+      drawRectGradient(cameraPos, getCameraSize(), vec4(0.02, 0.06, 0.18, 1), vec4(0.44, 0.22, 0.82, 1));
+      drawText('LittleJS Demo', vec2(-5.6, 1.6 + sin(wave) * 0.2), 2.2);
+      drawText('Hello from a tiny game engine', vec2(-8.2, -0.8), 1.1);
+    }
+
+    function gameRenderPost() {
+      drawTextScreen('Press F11 for fullscreen', mainCanvasSize.scale(.5).add(0, 120), 28);
+    }
+
+    engineInit(gameInit, gameUpdate, null, gameRender, gameRenderPost);
+  </script>
+</body>
 </html>

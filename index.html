@@ -41,47 +41,42 @@
     function drawGuideFrame() {
       const halfW = 18;
       const halfH = 10;
-      const edge = 0.4;
+      const outside = 0.5;
 
-      drawRect(vec2(0, 0), vec2(36, 20), rgb(0.04, 0.06, 0.1, 1));
-      drawRect(vec2(0, 0), vec2(36 - edge * 2, 20 - edge * 2), rgb(0.12, 0.16, 0.2, 1), 0, false);
+      drawRect(vec2(0, 0), vec2(36, 20), rgb(0.03, 0.05, 0.09, 1));
+      drawRect(vec2(0, 0), vec2(36 - outside * 2, 20 - outside * 2), rgb(0.12, 0.15, 0.18, 1), 0, false);
 
-      drawLine(vec2(-halfW, -halfH), vec2(halfW, -halfH), 0.24, rgb(1, 0.95, 0.75, 0.9));
-      drawLine(vec2(-halfW, halfH), vec2(halfW, halfH), 0.24, rgb(1, 0.95, 0.75, 0.9));
-      drawLine(vec2(-halfW, -halfH), vec2(-halfW, halfH), 0.24, rgb(1, 0.95, 0.75, 0.9));
-      drawLine(vec2(halfW, -halfH), vec2(halfW, halfH), 0.24, rgb(1, 0.95, 0.75, 0.9));
+      drawLine(vec2(-halfW, -halfH), vec2(halfW, -halfH), 0.22, rgb(1, 1, 1, 0.9));
+      drawLine(vec2(-halfW, halfH), vec2(halfW, halfH), 0.22, rgb(1, 1, 1, 0.9));
+      drawLine(vec2(-halfW, -halfH), vec2(-halfW, halfH), 0.22, rgb(1, 1, 1, 0.9));
+      drawLine(vec2(halfW, -halfH), vec2(halfW, halfH), 0.22, rgb(1, 1, 1, 0.9));
 
-      drawLine(vec2(-halfW, 0), vec2(halfW, 0), 0.12, rgb(0.45, 0.9, 1, 0.8));
-      drawLine(vec2(0, -halfH), vec2(0, halfH), 0.12, rgb(0.45, 0.9, 1, 0.8));
-
-      drawLine(vec2(-halfW + 1.5, -halfH + 1.5), vec2(halfW - 1.5, -halfH + 1.5), 0.08, rgb(1, 0.5, 0.5, 0.8));
-      drawLine(vec2(-halfW + 1.5, halfH - 1.5), vec2(halfW - 1.5, halfH - 1.5), 0.08, rgb(1, 0.5, 0.5, 0.8));
-      drawLine(vec2(-halfW + 1.5, -halfH + 1.5), vec2(-halfW + 1.5, halfH - 1.5), 0.08, rgb(1, 0.5, 0.5, 0.8));
-      drawLine(vec2(halfW - 1.5, -halfH + 1.5), vec2(halfW - 1.5, halfH - 1.5), 0.08, rgb(1, 0.5, 0.5, 0.8));
+      drawLine(vec2(-halfW, 0), vec2(halfW, 0), 0.1, rgb(0.42, 0.82, 1, 0.8));
+      drawLine(vec2(0, -halfH), vec2(0, halfH), 0.1, rgb(0.42, 0.82, 1, 0.8));
     }
 
     function drawArrowCenter() {
       const x = 0;
       const y = 0;
-      const body = 3.5;
-      const wings = 1.4;
+      const body = 4.2;
+      const wing = 1.8;
 
-      drawLine(vec2(x, y + 2.1), vec2(x, y - body), 0.42, rgb(1, 0.95, 0.7, 1));
-      drawLine(vec2(x - wings, y - 0.7), vec2(x, y - body), 0.42, rgb(1, 0.95, 0.7, 1));
-      drawLine(vec2(x + wings, y - 0.7), vec2(x, y - body), 0.42, rgb(1, 0.95, 0.7, 1));
-      drawCircle(vec2(x, y + 0.9), 0.95, rgb(0.38, 0.82, 1, 0.75));
+      drawLine(vec2(x, y + 2), vec2(x, y - body), 0.4, rgb(1, 0.95, 0.7, 1));
+      drawLine(vec2(x - wing, y - 0.8), vec2(x, y - body), 0.4, rgb(1, 0.95, 0.7, 1));
+      drawLine(vec2(x + wing, y - 0.8), vec2(x, y - body), 0.4, rgb(1, 0.95, 0.7, 1));
+      drawCircle(vec2(x, y + 1), 1, rgb(0.38, 0.82, 1, 0.8));
     }
 
-    function drawCornerMarks() {
-      const r = 13;
-      drawLine(vec2(-r, -r), vec2(-r + 2.5, -r), 0.2, rgb(0.9, 0.9, 1, 0.9));
-      drawLine(vec2(-r, -r), vec2(-r, -r + 2.5), 0.2, rgb(0.9, 0.9, 1, 0.9));
-      drawLine(vec2(r, -r), vec2(r - 2.5, -r), 0.2, rgb(0.9, 0.9, 1, 0.9));
-      drawLine(vec2(r, -r), vec2(r, -r + 2.5), 0.2, rgb(0.9, 0.9, 1, 0.9));
-      drawLine(vec2(-r, r), vec2(-r + 2.5, r), 0.2, rgb(0.9, 0.9, 1, 0.9));
-      drawLine(vec2(-r, r), vec2(-r, r - 2.5), 0.2, rgb(0.9, 0.9, 1, 0.9));
-      drawLine(vec2(r, r), vec2(r - 2.5, r), 0.2, rgb(0.9, 0.9, 1, 0.9));
-      drawLine(vec2(r, r), vec2(r, r - 2.5), 0.2, rgb(0.9, 0.9, 1, 0.9));
+    function drawSafeAreaMarkers() {
+      const r = 12.5;
+      drawLine(vec2(-r, -r), vec2(-r + 2.8, -r), 0.18, rgb(0.8, 0.9, 1, 0.9));
+      drawLine(vec2(-r, -r), vec2(-r, -r + 2.8), 0.18, rgb(0.8, 0.9, 1, 0.9));
+      drawLine(vec2(r, -r), vec2(r - 2.8, -r), 0.18, rgb(0.8, 0.9, 1, 0.9));
+      drawLine(vec2(r, -r), vec2(r, -r + 2.8), 0.18, rgb(0.8, 0.9, 1, 0.9));
+      drawLine(vec2(-r, r), vec2(-r + 2.8, r), 0.18, rgb(0.8, 0.9, 1, 0.9));
+      drawLine(vec2(-r, r), vec2(-r, r - 2.8), 0.18, rgb(0.8, 0.9, 1, 0.9));
+      drawLine(vec2(r, r), vec2(r - 2.8, r), 0.18, rgb(0.8, 0.9, 1, 0.9));
+      drawLine(vec2(r, r), vec2(r, r - 2.8), 0.18, rgb(0.8, 0.9, 1, 0.9));
     }
 
     function gameInit() {
@@ -94,12 +89,12 @@
 
     function gameRender() {
       drawGuideFrame();
-      drawCornerMarks();
+      drawSafeAreaMarkers();
       drawArrowCenter();
     }
 
     function gameRenderPost() {
-      drawTextScreen('viewport check', vec2(0, -135), 28, rgb(1, 1, 1, 0.9));
+      drawTextScreen('mobile viewport check', vec2(0, -140), 28, rgb(1, 1, 1, 0.9));
     }
 
     engineInit(gameInit, gameUpdate, null, gameRender, gameRenderPost);

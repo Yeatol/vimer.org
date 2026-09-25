@@ -1,5 +1,9 @@
 'use strict';
 
+// Hide the FPS watermark without changing files under core/
+debugWatermark = false;
+debugOverlay = false;
+
 const cubeList = [];
 const core = {
   body: null,

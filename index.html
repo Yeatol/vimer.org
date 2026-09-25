@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
   <title>LittleJS Demo</title>
   <style>
     :root {
@@ -12,87 +12,89 @@
       margin: 0;
       width: 100%;
       height: 100%;
+      min-height: 100dvh;
       overflow: hidden;
       background: #020817;
       font-family: Inter, "Segoe UI", sans-serif;
     }
     body {
-      display: grid;
-      place-items: center;
+      padding: 0;
+      box-sizing: border-box;
     }
     canvas {
       display: block;
+      position: fixed;
+      inset: 0;
       width: 100vw;
-      height: 100vh;
+      height: 100dvh;
+      max-width: none;
+      max-height: none;
       image-rendering: auto;
+      touch-action: none;
+      background: #020817;
     }
   </style>
 </head>
 <body>
   <script src="./littlejs.js"></script>
   <script>
-    let wave = 0;
-    let stars = [];
+    function drawGuideFrame() {
+      const halfW = 18;
+      const halfH = 10;
+      const out = 0.7;
+
+      drawRect(vec2(0, 0), vec2(36, 20), rgb(0, 0, 0, 1));
+      drawRect(vec2(0, 0), vec2(36 - out * 2, 20 - out * 2), rgb(0.08, 0.08, 0.1, 1), 0, false);
+
+      drawLine(vec2(-halfW, -halfH), vec2(halfW, -halfH), 0.25, rgb(1, 1, 1, 1));
+      drawLine(vec2(-halfW, halfH), vec2(halfW, halfH), 0.25, rgb(1, 1, 1, 1));
+      drawLine(vec2(-halfW, -halfH), vec2(-halfW, halfH), 0.25, rgb(1, 1, 1, 1));
+      drawLine(vec2(halfW, -halfH), vec2(halfW, halfH), 0.25, rgb(1, 1, 1, 1));
+
+      drawLine(vec2(-halfW, 0), vec2(halfW, 0), 0.12, rgb(1, 0.25, 0.25, 1));
+      drawLine(vec2(0, -halfH), vec2(0, halfH), 0.12, rgb(1, 0.25, 0.25, 1));
+    }
+
+    function drawArrowCenter() {
+      const x = 0;
+      const y = 0;
+      const body = 4.4;
+      const wing = 2.0;
+
+      drawLine(vec2(x, y + 2.1), vec2(x, y - body), 0.45, rgb(0.35, 0.8, 1, 1));
+      drawLine(vec2(x - wing, y - 0.8), vec2(x, y - body), 0.45, rgb(0.35, 0.8, 1, 1));
+      drawLine(vec2(x + wing, y - 0.8), vec2(x, y - body), 0.45, rgb(0.35, 0.8, 1, 1));
+      drawCircle(vec2(x, y + 1.0), 1.1, rgb(0.35, 0.8, 1, 0.8));
+    }
+
+    function drawCornerMarks() {
+      const r = 12.6;
+      drawLine(vec2(-r, -r), vec2(-r + 2.8, -r), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(-r, -r), vec2(-r, -r + 2.8), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(r, -r), vec2(r - 2.8, -r), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(r, -r), vec2(r, -r + 2.8), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(-r, r), vec2(-r + 2.8, r), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(-r, r), vec2(-r, r - 2.8), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(r, r), vec2(r - 2.8, r), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(r, r), vec2(r, r - 2.8), 0.18, rgb(1, 0.8, 0.5, 1));
+    }
 
     function gameInit() {
-      stars = Array.from({ length: 40 }, () => ({
-        pos: vec2(rand(-18, 18), rand(-9, 8)),
-        size: rand(.08, .3),
-        phase: rand(0, Math.PI * 2),
-        speed: rand(.5, 1.7),
-        alpha: rand(.4, 1),
-      }));
+      // minimal static checker
     }
 
     function gameUpdate() {
-      wave += 0.03;
-    }
-
-    function drawStarfield() {
-      for (const star of stars) {
-        const shimmer = 0.45 + (sin(wave * star.speed + star.phase) + 1) * 0.55;
-        drawRect(star.pos, vec2(star.size), rgb(1, 1, 1, star.alpha * shimmer));
-      }
-    }
-
-    function drawHills() {
-      const baseY = -2.6;
-      drawRectGradient(vec2(0, -5.7), vec2(36, 12), rgb(0.07, 0.12, 0.22, 1), rgb(0.27, 0.17, 0.46, 1));
-
-      drawCircleGradient(vec2(7.4, 3.3), 4.2, rgb(1, 0.78, 0.42, 1), rgb(1, 0.46, 0.8, 0.16));
-      drawRect(vec2(-18, baseY), vec2(18, 4.5), rgb(0.15, 0.18, 0.26, 1));
-      drawRect(vec2(0, baseY), vec2(20, 5.2), rgb(0.11, 0.24, 0.23, 1));
-      drawRect(vec2(-4, -1.8), vec2(10, 2.2), rgb(0.2, 0.39, 0.52, 1));
-      drawRect(vec2(8, -2.3), vec2(12, 2.8), rgb(0.14, 0.28, 0.34, 1));
-
-      for (let i = -16; i <= 16; i += 2) {
-        const y = -4.1 + sin(i * 0.7 + wave * 1.4) * 0.2;
-        drawRect(vec2(i, y), vec2(1.2, 0.2), rgb(0.62, 0.9, 0.96, 0.9));
-      }
-    }
-
-    function drawWave() {
-      for (let i = -18; i <= 18; i += 1.2) {
-        const x = i;
-        const y = -3.7 + sin(x * 0.9 + wave * 2.3) * 0.65;
-        drawCircle(vec2(x, y), .24, rgb(0.82, 0.96, 1, 0.9));
-      }
+      // no animation needed
     }
 
     function gameRender() {
-      drawRectGradient(cameraPos, getCameraSize(), rgb(0.02, 0.05, 0.15, 1), rgb(0.38, 0.18, 0.58, 1));
-      drawStarfield();
-
-      drawHills();
-      drawWave();
-
-      drawText('LittleJS Demo', vec2(-5.6, 1.8 + sin(wave) * 0.2), 2.2, rgb(0.94, 0.97, 1));
-      drawText('expanded with a tiny animated scene', vec2(-8.8, -0.6), 1.02, rgb(0.78, 0.85, 1));
-      drawText('F11 = fullscreen', vec2(8.3, -4.8), 0.8, rgb(0.95, 0.9, 1, 0.8));
+      drawGuideFrame();
+      drawCornerMarks();
+      drawArrowCenter();
     }
 
     function gameRenderPost() {
-      drawTextScreen('main branch demo • w/ motion and color', mainCanvasSize.scale(.5).add(0, 120), 28, rgb(1, 1, 1, 0.8));
+      drawTextScreen('max contrast viewport check', vec2(0, -140), 28, rgb(1, 1, 1, 0.9));
     }
 
     engineInit(gameInit, gameUpdate, null, gameRender, gameRenderPost);

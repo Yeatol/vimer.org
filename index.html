@@ -32,21 +32,67 @@
   <script src="./littlejs.js"></script>
   <script>
     let wave = 0;
+    let stars = [];
 
-    function gameInit() {}
+    function gameInit() {
+      stars = Array.from({ length: 40 }, () => ({
+        pos: vec2(rand(-18, 18), rand(-9, 8)),
+        size: rand(.08, .3),
+        phase: rand(0, Math.PI * 2),
+        speed: rand(.5, 1.7),
+        alpha: rand(.4, 1),
+      }));
+    }
 
     function gameUpdate() {
       wave += 0.03;
     }
 
+    function drawStarfield() {
+      for (const star of stars) {
+        const shimmer = 0.45 + (sin(wave * star.speed + star.phase) + 1) * 0.55;
+        drawRect(star.pos, vec2(star.size), rgb(1, 1, 1, star.alpha * shimmer));
+      }
+    }
+
+    function drawHills() {
+      const baseY = -2.6;
+      drawRectGradient(vec2(0, -5.7), vec2(36, 12), rgb(0.07, 0.12, 0.22, 1), rgb(0.27, 0.17, 0.46, 1));
+
+      drawCircleGradient(vec2(7.4, 3.3), 4.2, rgb(1, 0.78, 0.42, 1), rgb(1, 0.46, 0.8, 0.16));
+      drawRect(vec2(-18, baseY), vec2(18, 4.5), rgb(0.15, 0.18, 0.26, 1));
+      drawRect(vec2(0, baseY), vec2(20, 5.2), rgb(0.11, 0.24, 0.23, 1));
+      drawRect(vec2(-4, -1.8), vec2(10, 2.2), rgb(0.2, 0.39, 0.52, 1));
+      drawRect(vec2(8, -2.3), vec2(12, 2.8), rgb(0.14, 0.28, 0.34, 1));
+
+      for (let i = -16; i <= 16; i += 2) {
+        const y = -4.1 + sin(i * 0.7 + wave * 1.4) * 0.2;
+        drawRect(vec2(i, y), vec2(1.2, 0.2), rgb(0.62, 0.9, 0.96, 0.9));
+      }
+    }
+
+    function drawWave() {
+      for (let i = -18; i <= 18; i += 1.2) {
+        const x = i;
+        const y = -3.7 + sin(x * 0.9 + wave * 2.3) * 0.65;
+        drawCircle(vec2(x, y), .24, rgb(0.82, 0.96, 1, 0.9));
+      }
+    }
+
     function gameRender() {
-      drawRectGradient(cameraPos, getCameraSize(), vec4(0.02, 0.06, 0.18, 1), vec4(0.44, 0.22, 0.82, 1));
-      drawText('LittleJS Demo', vec2(-5.6, 1.6 + sin(wave) * 0.2), 2.2);
-      drawText('Hello from a tiny game engine', vec2(-8.2, -0.8), 1.1);
+      drawRectGradient(cameraPos, getCameraSize(), rgb(0.02, 0.05, 0.15, 1), rgb(0.38, 0.18, 0.58, 1));
+      drawStarfield();
+
+      drawHills();
+      drawWave();
+
+      drawText('LittleJS Demo', vec2(-5.6, 1.8 + sin(wave) * 0.2), 2.2, rgb(0.94, 0.97, 1));
+      drawText('expanded with a tiny animated scene', vec2(-8.8, -0.6), 1.02, rgb(0.78, 0.85, 1));
+      drawText('F11 = fullscreen', vec2(8.3, -4.8), 0.8, rgb(0.95, 0.9, 1, 0.8));
     }
 
     function gameRenderPost() {
-      drawTextScreen('Press F11 for fullscreen', mainCanvasSize.scale(.5).add(0, 120), 28);
+      drawTextScreen('main branch demo • w/ motion and color', mainCanvasSize.scale(.5).add(0, 120), 28, rgb(1, 1, 1, 0.8));
     }
 
     engineInit(gameInit, gameUpdate, null, gameRender, gameRenderPost);

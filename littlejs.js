@@ -95,6 +95,15 @@ let frameTimeLastMS = 0, frameTimeBufferMS = 0, averageFPS = 0;
 let windowWidthLast = 0, windowHeightLast = 0, windowPixelRatioLast = 0;
 let engineUpdateInternal; // assigned by engineInit so engineStep can drive it
 
+function getViewportSize()
+{
+    const viewport = window.visualViewport;
+    return {
+        width: viewport ? viewport.width : innerWidth,
+        height: viewport ? viewport.height : innerHeight,
+    };
+}
+
 // the pairs of objects asked about a collision this update and left overlapping, so the other's own physics does not
 // ask again, a set of others for each asker so the lookup stays quick when many objects pile up on one spot
 const engineObjectsCollidePairs = new Map;
@@ -302,10 +311,11 @@ async function engineInit(gameInit, gameUpdate, gameUpdatePost, gameRender, game
         if (!headlessMode)
         {
             const dpr = devicePixelRatio;
-            windowChanged = windowWidthLast !== innerWidth ||
-                windowHeightLast !== innerHeight || windowPixelRatioLast !== dpr;
-            windowWidthLast = innerWidth;
-            windowHeightLast = innerHeight;
+            const viewport = getViewportSize();
+            windowChanged = windowWidthLast !== viewport.width ||
+                windowHeightLast !== viewport.height || windowPixelRatioLast !== dpr;
+            windowWidthLast = viewport.width;
+            windowHeightLast = viewport.height;
             windowPixelRatioLast = dpr;
         }
 
@@ -463,8 +473,9 @@ function engineUpdateCanvas()
         // set canvas fixed size
         mainCanvasSize = canvasFixedSize.copy();
 
-        // fit to window using css width and height
-        const innerAspect = innerWidth / innerHeight;
+        // fit to current viewport using css width and height
+        const viewport = getViewportSize();
+        const innerAspect = viewport.width / viewport.height;
         const fixedAspect = canvasFixedSize.x / canvasFixedSize.y;
         const w = innerAspect < fixedAspect ? '100%' : '';
         const h = innerAspect < fixedAspect ? '' : '100%';
@@ -478,13 +489,15 @@ function engineUpdateCanvas()
     }
     else
     {
-        // get main canvas size based on window size, in css pixels so
+        const viewport = getViewportSize();
+
+        // get main canvas size based on visible viewport size, in css pixels so
         // canvasMaxSize caps how big the canvas looks, not its resolution
-        mainCanvasSize.x = min(innerWidth,  canvasMaxSize.x) | 0;
-        mainCanvasSize.y = min(innerHeight, canvasMaxSize.y) | 0;
+        mainCanvasSize.x = min(viewport.width, canvasMaxSize.x) | 0;
+        mainCanvasSize.y = min(viewport.height, canvasMaxSize.y) | 0;
 
         // responsive aspect ratio
-        const innerAspect = innerWidth / innerHeight;
+        const innerAspect = viewport.width / viewport.height;
         ASSERT(!canvasMaxAspect || canvasMinAspect <= canvasMaxAspect);
         if (canvasMaxAspect && innerAspect > canvasMaxAspect)
         {

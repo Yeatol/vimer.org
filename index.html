@@ -41,42 +41,42 @@
     function drawGuideFrame() {
       const halfW = 18;
       const halfH = 10;
-      const outside = 0.5;
+      const out = 0.7;
 
-      drawRect(vec2(0, 0), vec2(36, 20), rgb(0.03, 0.05, 0.09, 1));
-      drawRect(vec2(0, 0), vec2(36 - outside * 2, 20 - outside * 2), rgb(0.12, 0.15, 0.18, 1), 0, false);
+      drawRect(vec2(0, 0), vec2(36, 20), rgb(0, 0, 0, 1));
+      drawRect(vec2(0, 0), vec2(36 - out * 2, 20 - out * 2), rgb(0.08, 0.08, 0.1, 1), 0, false);
 
-      drawLine(vec2(-halfW, -halfH), vec2(halfW, -halfH), 0.22, rgb(1, 1, 1, 0.9));
-      drawLine(vec2(-halfW, halfH), vec2(halfW, halfH), 0.22, rgb(1, 1, 1, 0.9));
-      drawLine(vec2(-halfW, -halfH), vec2(-halfW, halfH), 0.22, rgb(1, 1, 1, 0.9));
-      drawLine(vec2(halfW, -halfH), vec2(halfW, halfH), 0.22, rgb(1, 1, 1, 0.9));
+      drawLine(vec2(-halfW, -halfH), vec2(halfW, -halfH), 0.25, rgb(1, 1, 1, 1));
+      drawLine(vec2(-halfW, halfH), vec2(halfW, halfH), 0.25, rgb(1, 1, 1, 1));
+      drawLine(vec2(-halfW, -halfH), vec2(-halfW, halfH), 0.25, rgb(1, 1, 1, 1));
+      drawLine(vec2(halfW, -halfH), vec2(halfW, halfH), 0.25, rgb(1, 1, 1, 1));
 
-      drawLine(vec2(-halfW, 0), vec2(halfW, 0), 0.1, rgb(0.42, 0.82, 1, 0.8));
-      drawLine(vec2(0, -halfH), vec2(0, halfH), 0.1, rgb(0.42, 0.82, 1, 0.8));
+      drawLine(vec2(-halfW, 0), vec2(halfW, 0), 0.12, rgb(1, 0.25, 0.25, 1));
+      drawLine(vec2(0, -halfH), vec2(0, halfH), 0.12, rgb(1, 0.25, 0.25, 1));
     }
 
     function drawArrowCenter() {
       const x = 0;
       const y = 0;
-      const body = 4.2;
-      const wing = 1.8;
+      const body = 4.4;
+      const wing = 2.0;
 
-      drawLine(vec2(x, y + 2), vec2(x, y - body), 0.4, rgb(1, 0.95, 0.7, 1));
-      drawLine(vec2(x - wing, y - 0.8), vec2(x, y - body), 0.4, rgb(1, 0.95, 0.7, 1));
-      drawLine(vec2(x + wing, y - 0.8), vec2(x, y - body), 0.4, rgb(1, 0.95, 0.7, 1));
-      drawCircle(vec2(x, y + 1), 1, rgb(0.38, 0.82, 1, 0.8));
+      drawLine(vec2(x, y + 2.1), vec2(x, y - body), 0.45, rgb(0.35, 0.8, 1, 1));
+      drawLine(vec2(x - wing, y - 0.8), vec2(x, y - body), 0.45, rgb(0.35, 0.8, 1, 1));
+      drawLine(vec2(x + wing, y - 0.8), vec2(x, y - body), 0.45, rgb(0.35, 0.8, 1, 1));
+      drawCircle(vec2(x, y + 1.0), 1.1, rgb(0.35, 0.8, 1, 0.8));
     }
 
-    function drawSafeAreaMarkers() {
-      const r = 12.5;
-      drawLine(vec2(-r, -r), vec2(-r + 2.8, -r), 0.18, rgb(0.8, 0.9, 1, 0.9));
-      drawLine(vec2(-r, -r), vec2(-r, -r + 2.8), 0.18, rgb(0.8, 0.9, 1, 0.9));
-      drawLine(vec2(r, -r), vec2(r - 2.8, -r), 0.18, rgb(0.8, 0.9, 1, 0.9));
-      drawLine(vec2(r, -r), vec2(r, -r + 2.8), 0.18, rgb(0.8, 0.9, 1, 0.9));
-      drawLine(vec2(-r, r), vec2(-r + 2.8, r), 0.18, rgb(0.8, 0.9, 1, 0.9));
-      drawLine(vec2(-r, r), vec2(-r, r - 2.8), 0.18, rgb(0.8, 0.9, 1, 0.9));
-      drawLine(vec2(r, r), vec2(r - 2.8, r), 0.18, rgb(0.8, 0.9, 1, 0.9));
-      drawLine(vec2(r, r), vec2(r, r - 2.8), 0.18, rgb(0.8, 0.9, 1, 0.9));
+    function drawCornerMarks() {
+      const r = 12.6;
+      drawLine(vec2(-r, -r), vec2(-r + 2.8, -r), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(-r, -r), vec2(-r, -r + 2.8), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(r, -r), vec2(r - 2.8, -r), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(r, -r), vec2(r, -r + 2.8), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(-r, r), vec2(-r + 2.8, r), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(-r, r), vec2(-r, r - 2.8), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(r, r), vec2(r - 2.8, r), 0.18, rgb(1, 0.8, 0.5, 1));
+      drawLine(vec2(r, r), vec2(r, r - 2.8), 0.18, rgb(1, 0.8, 0.5, 1));
     }
 
     function gameInit() {
@@ -89,12 +89,12 @@
 
     function gameRender() {
       drawGuideFrame();
-      drawSafeAreaMarkers();
+      drawCornerMarks();
       drawArrowCenter();
     }
 
     function gameRenderPost() {
-      drawTextScreen('mobile viewport check', vec2(0, -140), 28, rgb(1, 1, 1, 0.9));
+      drawTextScreen('max contrast viewport check', vec2(0, -140), 28, rgb(1, 1, 1, 0.9));
     }
 
     engineInit(gameInit, gameUpdate, null, gameRender, gameRenderPost);
